@@ -12,7 +12,14 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'social': 'url(/background.png)'
       },
+      colors: {
+        'gray-bgd': 'F6F9FB',
+        'gray-dark': 'E8F0F4',
+        'blue-light': '#06F3F7',
+        'blue-dark': '#032F96'
+      }
     },
   },
   plugins: [],

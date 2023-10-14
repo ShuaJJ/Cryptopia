@@ -16,9 +16,9 @@ const config: Config = {
       },
       colors: {
         'gray-bgd': '#F2F5F7',
-        'gray-dark': '#E8F0F4',
-        'blue-light': '#06F3F7',
-        'blue-dark': '#032F96'
+        'gray-text': '#97A0B1',
+        'purple-light': '#F1EBFE',
+        'purple-dark': '#925CFF'
       }
     },
   },

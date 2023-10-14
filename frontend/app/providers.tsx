@@ -44,8 +44,8 @@ export default function Providers({
                 chains={chains}
                 showRecentTransactions={true}
                 theme={lightTheme({
-                    accentColor: '#032F96',
-                    accentColorForeground: '#06F3F7',
+                    accentColor: '#F1EBFE',
+                    accentColorForeground: '#925CFF',
                 })}
             >
                 {children}

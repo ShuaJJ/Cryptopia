@@ -7,14 +7,10 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import {
-  mainnet,
-  polygon,
-} from 'wagmi/chains';
-import { localhost } from '@/utils/constants';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 import { ReactNode } from 'react';
+import { SUPPORTED_CHAINS } from '@/utils/constants';
 
 export default function Providers({
     infuraKey,
@@ -26,7 +22,7 @@ export default function Providers({
     children: ReactNode
 }) {
     const { chains, publicClient } = configureChains(
-        [mainnet, polygon, localhost],
+        SUPPORTED_CHAINS,
         [infuraProvider({ apiKey: infuraKey }), publicProvider()],
     );
       
@@ -46,7 +42,6 @@ export default function Providers({
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider 
                 chains={chains}
-                initialChain={localhost}
                 showRecentTransactions={true}
                 theme={lightTheme({
                     accentColor: '#032F96',

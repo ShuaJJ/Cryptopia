@@ -1,4 +1,8 @@
 import { Chain } from '@wagmi/core'
+import {
+    mainnet,
+    polygon,
+  } from 'wagmi/chains';
 import * as AllContracts from "../contract/contracts.json";
 
 export const ALL_CONTRACTS = AllContracts;
@@ -21,3 +25,9 @@ export const localhost = {
     default: { name: 'Etherscan', url: 'https://etherscan.io' },
   },
 } as const satisfies Chain
+
+export const SUPPORTED_CHAINS = [
+    mainnet,
+    polygon,
+    localhost
+];

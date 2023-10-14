@@ -1,5 +1,9 @@
-import Onboard from "@/components/user/Onboard";
+import WithUserConnect from "@/components/user/WithUserConnect";
 
 export default function Home() {
-  return <Onboard />
+  return (
+    <WithUserConnect>
+      Hello
+    </WithUserConnect>
+  )
 }

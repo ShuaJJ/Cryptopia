@@ -1,7 +1,9 @@
-import '@rainbow-me/rainbowkit/styles.css';
+'use client'
 
+import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
+  lightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
@@ -9,25 +11,28 @@ import {
   mainnet,
   polygon,
 } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { localhost } from '@/utils/constants';
+import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 import { ReactNode } from 'react';
 
 export default function Providers({
+    infuraKey,
+    walletConnectId,
     children
 } : {
+    infuraKey: string,
+    walletConnectId: string,
     children: ReactNode
 }) {
     const { chains, publicClient } = configureChains(
-        [mainnet, polygon],
-        [
-          publicProvider()
-        ]
+        [mainnet, polygon, localhost],
+        [infuraProvider({ apiKey: infuraKey }), publicProvider()],
     );
       
     const { connectors } = getDefaultWallets({
-        appName: 'My RainbowKit App',
-        projectId: 'YOUR_PROJECT_ID',
+        appName: 'Cryptopia',
+        projectId: walletConnectId,
         chains
     });
     
@@ -41,7 +46,12 @@ export default function Providers({
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider 
                 chains={chains}
+                initialChain={localhost}
                 showRecentTransactions={true}
+                theme={lightTheme({
+                    accentColor: '#032F96',
+                    accentColorForeground: '#06F3F7',
+                })}
             >
                 {children}
             </RainbowKitProvider>

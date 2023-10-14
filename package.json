@@ -7,6 +7,7 @@
     "url": "https://github.com/ShuaJJ"
   },
   "devDependencies": {
+    "@types/node": "^20.8.4",
     "prettier": "^3.0.0"
   },
   "keywords": [
@@ -28,7 +29,9 @@
     "prettier:write": "prettier --write **/*.{json,md,yml} --ignore-path=.prettierignore",
     "test": "forge test",
     "test:coverage": "forge coverage",
-    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage"
+    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage",
+    "deploy:user:local": "forge script script/DeployUser.s.sol --broadcast --fork-url http://localhost:8545",
+    "generate": "ts-node ./script/generateContractAddresses.ts"
   },
   "dependencies": {
     "solhint": "^3.6.2"

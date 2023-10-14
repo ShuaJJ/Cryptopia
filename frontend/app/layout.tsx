@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from './providers'
+import Sidebar from '@/components/layout/Sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,7 +23,13 @@ export default function RootLayout({
           walletConnectId={process.env.WALLET_CONNECT_ID ?? ''} 
           infuraKey={process.env.INFURA_PROJECT_ID ?? ''}
         >
-          {children}
+          <div className="min-h-screen max-w-screen-xl relative mx-auto">
+            <Sidebar isLeft>
+              CCCC
+            </Sidebar>
+            {children}
+            <Sidebar>BBB</Sidebar>
+          </div>
         </Providers>
       </body>
     </html>

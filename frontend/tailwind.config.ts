@@ -15,8 +15,8 @@ const config: Config = {
         'social': 'url(/background.png)'
       },
       colors: {
-        'gray-bgd': 'F6F9FB',
-        'gray-dark': 'E8F0F4',
+        'gray-bgd': '#F6F9FB',
+        'gray-dark': '#E8F0F4',
         'blue-light': '#06F3F7',
         'blue-dark': '#032F96'
       }

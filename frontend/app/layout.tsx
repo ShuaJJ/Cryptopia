@@ -5,6 +5,7 @@ import Providers from './providers'
 import TopMenu from '@/components/layout/TopMenu'
 import WhiteBox from '@/components/layout/WhiteBox'
 import PostButton from '@/components/button/PostButton'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,13 +21,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + " bg-gray-bgd pt-24"}>
+      <body className={inter.className + " bg-gray-bgd"}>
         <Providers 
           walletConnectId={process.env.WALLET_CONNECT_ID ?? ''} 
           infuraKey={process.env.INFURA_PROJECT_ID ?? ''}
         >
           <TopMenu />
-          <div className="min-h-screen max-w-screen-xl relative mx-auto grid grid-cols-[1fr_2fr_1fr]">
+          <div className="min-h-screen max-w-screen-xl relative mx-auto grid grid-cols-[1fr_2fr_1fr] pt-24">
             <div>
               <WhiteBox>AAA</WhiteBox>
               <WhiteBox>BBB</WhiteBox>
@@ -40,6 +41,7 @@ export default function RootLayout({
             </div>
           </div>
         </Providers>
+        <div><Toaster/></div>
       </body>
     </html>
   )

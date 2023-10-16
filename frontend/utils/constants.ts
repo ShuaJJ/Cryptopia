@@ -1,7 +1,6 @@
 import { Chain } from '@wagmi/core'
 import {
-    mainnet,
-    polygon,
+    sepolia,
   } from 'wagmi/chains';
 import * as AllContracts from "../contract/contracts.json";
 
@@ -27,7 +26,13 @@ export const localhost = {
 } as const satisfies Chain
 
 export const SUPPORTED_CHAINS = [
-    mainnet,
-    polygon,
+    sepolia,
     localhost
 ];
+
+export const POST_TYPES = [
+  "announcement",
+  "event",
+  "airdrop",
+  "job",
+]

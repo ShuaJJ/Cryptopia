@@ -1,4 +1,4 @@
-import { Abi, Address } from "viem";
+import { Abi, Address, PublicClient, WalletClient } from "viem";
 import { POST_TYPES } from "./constants";
 
 export interface ContractInfo {
@@ -7,3 +7,16 @@ export interface ContractInfo {
 }
 
 export type PostType = typeof POST_TYPES[number] | "post"
+
+export interface AccessTokenProps {
+    web3StorageAccessToken: string;
+}
+
+export interface TxProps extends AccessTokenProps {
+    walletClient?: WalletClient | null;
+    publicClient?: PublicClient;
+    account?: Address;
+    userContract?: ContractInfo | null;
+    addRecentTransaction: (tx: { hash: string, description: string}) => void,
+    refetch?: () => void;
+}

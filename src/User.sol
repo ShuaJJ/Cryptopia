@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract User is Ownable {
 
-    mapping(address user => uint256 cid) public userInfo;
+    mapping(address user => string cid) public userInfo;
     // 0 is not verified; 1 is pending; 2 is verified
     mapping(address user => uint8 isVerified) public verified;
 
@@ -15,12 +15,13 @@ contract User is Ownable {
         verified[user] = 2;
     }
 
-    function applyVerify() external {
+    function applyVerify(string memory cid) external {
         require(verified[msg.sender] == 0, "Already applied");
         verified[msg.sender] = 1;
+        userInfo[msg.sender] = cid;
     }
 
-    function updateUserInfo(uint256 cid) external {
+    function updateUserInfo(string memory cid) external {
         userInfo[msg.sender] = cid;
     }
 }

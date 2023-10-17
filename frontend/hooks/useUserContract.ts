@@ -7,7 +7,10 @@ export const useUserContract = (): ContractInfo | null => {
     const chainId = chain?.id;
     const contract: any = ALL_CONTRACTS.User;
     if (chainId) {
-        return contract.deployments[chainId.toString()];
+        return {
+            abi: contract.abi,
+            address: contract.deployments[chainId.toString()]
+        };
     }
     return null;
 }

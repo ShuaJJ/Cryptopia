@@ -1,22 +1,25 @@
 import { useIsVerified } from "@/hooks/useIsVerified";
-import { PostType } from "@/utils/types";
+import { AccessTokenProps, PostType, TxProps } from "@/utils/types";
 import { useState } from "react";
-import { Address } from "viem";
 import TypeSelect from "./TypeSelect";
-import { useUserInfo } from "@/hooks/useUserInfo";
+import { useAccount, usePublicClient, useWalletClient } from "wagmi";
+import { useUserContract } from "@/hooks/useUserContract";
+import { useAddRecentTransaction } from '@rainbow-me/rainbowkit';
 import backIcon from "@/public/back.svg";
 import Image from "next/image";
 import UserInfo from "../user/UserInfo";
 import PostForm from "./PostForm";
 
 export default function NewPost({
-    address,
-} : {
-    address?: Address
-}) {
+    web3StorageAccessToken
+} : AccessTokenProps) {
 
-    const { data: userInfo } = useUserInfo(address);
-    const { data: isVerified } = useIsVerified(address);
+    const { data: walletClient } = useWalletClient()
+    const publicClient = usePublicClient();
+    const userContract = useUserContract();
+    const addRecentTransaction = useAddRecentTransaction();
+    const { address } = useAccount();
+    const { data: isVerified, refetch: refetchVerified } = useIsVerified(address);
     const [type, setType] = useState<PostType|undefined>(undefined);
     const [needVerify, setNeedVerify] = useState(false)
 
@@ -36,9 +39,23 @@ export default function NewPost({
         title = 'Please select a post type';
     }
 
+    const refetch = () => {
+        refetchVerified();
+    }
+
+    const props: TxProps = {
+        walletClient,
+        publicClient,
+        userContract,
+        account: address,
+        addRecentTransaction,
+        web3StorageAccessToken,
+        refetch,
+    }
+
     const modalBody = () => {
         if (needVerify && isVerified == 0) {
-            return <UserInfo />
+            return <UserInfo { ...props } />
         }else if (!needVerify && type) {
             return <PostForm />
         } else if (!type) {
@@ -63,7 +80,7 @@ export default function NewPost({
                         <Image src={backIcon} alt="back" />
                     </div>
                 )}
-                <div className="text-center text-xl mb-6 font-semibold max-w-sm">
+                <div className="text-center text-xl mb-6 font-semibold max-w-xs mt-8">
                     {title}
                 </div>
                 {modalBody()}

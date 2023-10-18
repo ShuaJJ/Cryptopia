@@ -28,3 +28,20 @@ export interface NewPostProps extends AccessTokenProps {
 export interface PostFormProps extends TxProps {
     type: PostType;
 }
+
+export interface Post {
+    cid: string;
+    author: string;
+}
+
+export interface PostContent {
+    content?: string;
+    type?: PostType;
+    name?: string;
+    description?: string;
+    image: string;
+}
+
+export interface PostInfo extends PostContent, AccessTokenProps {
+    author: Address;
+}

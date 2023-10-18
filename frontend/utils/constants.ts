@@ -48,3 +48,5 @@ export const contractPostType = (type: string) => {
   const postType = POST_TYPES.indexOf(type);
   return postType == -1 ? POST_TYPES.length : postType;
 }
+
+export const ipfsDomain = "ipfs.w3s.link";

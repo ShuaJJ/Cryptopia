@@ -58,7 +58,7 @@ export default function UserInfo({
         const blob = new Blob([JSON.stringify(info)], { type: 'application/json' })
         const files = [
             file,
-            new File([blob], 'hello.json')
+            new File([blob], 'content.json')
         ]
 
         setLoading(true);

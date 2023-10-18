@@ -1,9 +1,9 @@
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
-import { useUserContract } from "./useUserContract";
+import { useContract } from "./useContract";
 
 export const useUserInfo = (address?: Address) => {
-    const userContract = useUserContract();
+    const userContract = useContract('User');
     const { data, isLoading, error } = useContractRead({
         ...userContract!,
         functionName: 'userInfo',

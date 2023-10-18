@@ -36,3 +36,15 @@ export const POST_TYPES = [
   "airdrop",
   "job",
 ]
+
+export const POST_TITLES: any = {
+  "announcement": "Please upload a cool image and enter your announcement content",
+  "event": "Please upload the event poster and enter your event's description",
+  "airdrop": "Please upload a poster of the airdrop and enter the rules of the airdrop",
+  "job": "Please upload a cool image and describe the job(include contact info)",
+}
+
+export const contractPostType = (type: string) => {
+  const postType = POST_TYPES.indexOf(type);
+  return postType == -1 ? POST_TYPES.length : postType;
+}

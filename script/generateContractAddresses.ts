@@ -8,7 +8,7 @@ const getBlob = (type: string, chainId: string) =>
     JSON.parse(fs.readFileSync(`${rootFolder}/broadcast/Deploy${type}.s.sol/${chainId}/run-latest.json`, "utf8"));
 
 const supportedChains = [31337, 11155111]
-const contracts = ['User'];
+const contracts = ['User', 'Post'];
 const result: any = {};
 
 for (let i=0; i<contracts.length; i++) {
@@ -17,8 +17,12 @@ for (let i=0; i<contracts.length; i++) {
     result[contractName] = { abi, deployments: {} };
     for (let j=0; j<supportedChains.length; j++) {
         const chainId = supportedChains[j].toString();
-        const deployInfo = getBlob(contractName, chainId);
-        result[contractName]["deployments"][chainId] = deployInfo.transactions[0].contractAddress;
+        try {
+            const deployInfo = getBlob(contractName, chainId);
+            result[contractName]["deployments"][chainId] = deployInfo.transactions[0].contractAddress;
+        } catch {
+            
+        }
     }
 }
 

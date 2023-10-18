@@ -17,6 +17,6 @@ export default function PostButton(props: AccessTokenProps) {
         >
             New Post
         </MainButton>
-        {show && <NewPost { ...props } />}
+        {show && <NewPost { ...props } setShow={setShow} />}
     </>
 }

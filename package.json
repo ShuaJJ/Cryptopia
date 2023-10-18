@@ -30,9 +30,14 @@
     "test": "forge test",
     "test:coverage": "forge coverage",
     "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage",
+
     "deploy:user:local": "forge script script/DeployUser.s.sol --broadcast --fork-url http://localhost:8545",
+    "deploy:post:local": "forge script script/DeployPost.s.sol --broadcast --fork-url http://localhost:8545",
+    "verify:user:local": "forge script script/VerifyUser.s.sol:VerifyUser 0x8E84d002c30Bf522233Fa1517ee2718D670fd578 $ADDRESS --sig 'run(address,address)' --fork-url http://localhost:8545 --broadcast -vvv",
+
     "deploy:user:sepolia": "forge script script/DeployUser.s.sol --rpc-url https://sepolia.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ETHERSCAN",
     "verify:user:sepolia": "forge script script/VerifyUser.s.sol:VerifyUser 0x8E84d002c30Bf522233Fa1517ee2718D670fd578 $ADDRESS --sig 'run(address,address)' --fork-url https://sepolia.infura.io/v3/$API_KEY_INFURA --broadcast -vvv",
+
     "generate": "ts-node ./script/generateContractAddresses.ts"
   },
   "dependencies": {

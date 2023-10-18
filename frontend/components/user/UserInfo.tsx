@@ -11,7 +11,7 @@ export default function UserInfo({
     web3StorageAccessToken,
     walletClient,
     publicClient,
-    userContract,
+    contract: userContract,
     account,
     refetch,
     addRecentTransaction,

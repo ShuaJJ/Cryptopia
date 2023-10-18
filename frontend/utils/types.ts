@@ -16,7 +16,15 @@ export interface TxProps extends AccessTokenProps {
     walletClient?: WalletClient | null;
     publicClient?: PublicClient;
     account?: Address;
-    userContract?: ContractInfo | null;
+    contract?: ContractInfo | null;
     addRecentTransaction: (tx: { hash: string, description: string}) => void,
     refetch?: () => void;
+}
+
+export interface NewPostProps extends AccessTokenProps {
+    setShow: (show: boolean) => void;
+}
+
+export interface PostFormProps extends TxProps {
+    type: PostType;
 }

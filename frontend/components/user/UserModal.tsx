@@ -6,17 +6,14 @@ export default function UserModal({
     name,
     description,
     close,
+    follow,
 } : {
     logo: string,
     name: string,
     description: string,
     close: () => void,
+    follow: () => void,
 }) {
-
-    const follow = () => {
-        
-    }
-
 
     return (
         <Modal>
@@ -29,7 +26,7 @@ export default function UserModal({
             >
                 X
             </div>
-            <div className="flex flex-col gap-4 items-center justify-center min-w-[320px]">
+            <div className="flex flex-col gap-4 items-center justify-center min-w-[320px] max-w-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */} 
                 <img 
                     src={logo}
@@ -40,9 +37,7 @@ export default function UserModal({
                 <div className="text-gray-400 mb-8 text-sm">{description}</div>
                 <MainButton
                     secondary
-                    onClick={() => {
-
-                    }}
+                    onClick={follow}
                 >
                     Follow
                 </MainButton>

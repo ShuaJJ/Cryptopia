@@ -1,13 +1,21 @@
 import { useUserInfo } from "@/hooks/useUserInfo";
 import getPostContent from "@/utils/getPostContent";
-import { PostContent, PostInfo } from "@/utils/types";
+import { PostContent, PostItem } from "@/utils/types";
 import { useEffect, useState } from "react";
 import UserModal from "../user/UserModal";
+import { sendTx } from "@/utils/sendTx";
+import { toast } from "react-hot-toast";
 
 export default function RandomAvatar({
     author,
+    account,
+    publicClient,
+    walletClient,
+    contract,
+    addRecentTransaction,
+    userContract,
     web3StorageAccessToken
-}: PostInfo) {
+}: PostItem) {
 
     const index = Math.floor(Math.random() * 6);
     const { data: cid } = useUserInfo(author);
@@ -30,6 +38,24 @@ export default function RandomAvatar({
         setShowUserModal(false);
     }
 
+    const follow = () => {
+        if (account && userContract && publicClient && walletClient) {
+            sendTx(
+                'Follow',
+                account,
+                userContract,
+                'follow',
+                publicClient,
+                walletClient,
+                addRecentTransaction,
+                [author]
+            )
+        } else {
+            toast('Please make sure you are connected', { position: 'top-center'})
+        }
+
+    }
+
     return (
         <div 
             className="flex gap-3 items-center px-6 mb-4"
@@ -45,10 +71,10 @@ export default function RandomAvatar({
                     setShowUserModal(true)
                 }}
             />
-            <div>
+            <div className="grow-0">
                 <div className="text-sm font-semibold">{username}</div>
                 {authorInfo?.description && (
-                    <div className="text-xs text-gray-400">{authorInfo.description}</div>
+                    <div className="text-xs text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap w-96">{authorInfo.description}</div>
                 )}
             </div>
             {showUserModal && (
@@ -57,6 +83,7 @@ export default function RandomAvatar({
                     name={username} 
                     description={authorInfo?.description ?? ''} 
                     close={close}
+                    follow={follow}
                 />
             )}
         </div>

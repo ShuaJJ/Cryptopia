@@ -20,14 +20,6 @@ export default function PostList({ web3StorageAccessToken } : AccessTokenProps) 
     const addRecentTransaction = useAddRecentTransaction();
     const { address } = useAccount();
 
-    const props: TxProps = {
-        walletClient,
-        publicClient,
-        account: address,
-        addRecentTransaction,
-        web3StorageAccessToken,
-    }
-
     const GET_POSTS = gql`
         query GetPosts {
             createPosts(first: 32) {
@@ -40,6 +32,14 @@ export default function PostList({ web3StorageAccessToken } : AccessTokenProps) 
 
     const { loading, error, data } = useQuery(GET_POSTS);
     const posts = data?.createPosts ?? []
+
+    if (loading) {
+        return <Skeleton />
+    }
+
+    if (posts.length == 0) {
+        return <div className='text-center mt-8'>No posts yet...</div>
+    }
 
     return (
         <div className="flex flex-col gap-6 pb-24">
@@ -62,7 +62,7 @@ export default function PostList({ web3StorageAccessToken } : AccessTokenProps) 
 }
 
 function Post(props: PostItem) {
-    const {author, cid, web3StorageAccessToken:token} = props;
+    const {cid, web3StorageAccessToken:token} = props;
     const [showMore, setShowMore] = useState(false);
     const [loading, setLoading] = useState(false);
     const [postContent, setPostContent] = useState<PostContent|null>(null);
@@ -85,17 +85,11 @@ function Post(props: PostItem) {
         return null;
     }
 
-    const postInfo: PostInfo = {
-        ...postContent,
-        author,
-        web3StorageAccessToken: token,
-    }
-
     const content = postContent.content ?? '';
 
     return (
         <div className="bg-white shadow rounded-lg py-6">
-            <RandomAvatar { ...postInfo } />
+            <RandomAvatar { ...props } />
             <ImageViewer url={postContent.image} />
             <div className="p-6 text-gray-600">
                 {content.length < postContentLimit ? <>{postContent.content}</> : (

@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.6",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "encoding": "^0.1.13",
+    "graphql": "^16.8.1",
     "lokijs": "^1.5.12",
     "next": "13.5.4",
     "pino-pretty": "^10.2.3",

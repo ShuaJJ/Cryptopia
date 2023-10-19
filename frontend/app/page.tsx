@@ -3,6 +3,7 @@ import WhiteBox from '@/components/layout/WhiteBox'
 import PostButton from '@/components/button/PostButton'
 import { AccessTokenProps } from "@/utils/types";
 import PostList from "@/components/post/PostList";
+import GraphProvider from "@/components/GraphProvider";
 
 export default function Home() {
 
@@ -18,7 +19,9 @@ export default function Home() {
               <WhiteBox>BBB</WhiteBox>
               <WhiteBox>CCC</WhiteBox>
             </div>
-            <PostList { ...accessTokens } />
+            <GraphProvider>
+              <PostList { ...accessTokens } />
+            </GraphProvider>
             <div>
               <WhiteBox>
                 <PostButton { ...accessTokens } />

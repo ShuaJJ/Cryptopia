@@ -1,0 +1,44 @@
+type Comment @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  content: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CreatePost @entity(immutable: true) {
+  id: Bytes!
+  author: Bytes! # address
+  postType: Int! # uint8
+  cid: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type Follow @entity(immutable: true) {
+  id: Bytes!
+  follower: Bytes! # address
+  follow: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Verify @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  cid: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

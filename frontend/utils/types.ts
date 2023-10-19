@@ -29,6 +29,12 @@ export interface PostFormProps extends TxProps {
     type: PostType;
 }
 
+export interface PostItem extends TxProps {
+    author: Address;
+    cid: string;
+    userContract?: ContractInfo | null;
+}
+
 export interface Post {
     cid: string;
     author: string;

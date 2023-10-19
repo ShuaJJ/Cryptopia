@@ -1,8 +1,8 @@
 'use client'
 
-import { usePost } from "@/hooks/usePost";
+import { gql, useQuery } from '@apollo/client';
 import getPostContent from "@/utils/getPostContent";
-import { AccessTokenProps, PostContent, PostInfo, TxProps } from "@/utils/types";
+import { AccessTokenProps, PostContent, PostInfo, PostItem, TxProps } from "@/utils/types";
 import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RandomAvatar from "./RandomAvatar";
@@ -28,39 +28,56 @@ export default function PostList({ web3StorageAccessToken } : AccessTokenProps) 
         web3StorageAccessToken,
     }
 
+    const GET_POSTS = gql`
+        query GetPosts {
+            createPosts(first: 32) {
+                author,
+                postType,
+                cid,
+            }
+        }
+    `;
+
+    const { loading, error, data } = useQuery(GET_POSTS);
+    const posts = data?.createPosts ?? []
+
     return (
         <div className="flex flex-col gap-6 pb-24">
-            <Post token={web3StorageAccessToken} index={0} />
-            <Post token={web3StorageAccessToken} index={2} />
-            <Post token={web3StorageAccessToken} index={1} />
+            { posts.map((post: any) => (
+                <Post
+                    publicClient={publicClient}
+                    walletClient={walletClient}
+                    contract={postContract}
+                    account={address}
+                    author={post.author}
+                    cid={post.cid}
+                    web3StorageAccessToken={web3StorageAccessToken}
+                    addRecentTransaction={addRecentTransaction}
+                    userContract={userContract}
+                    key={post.cid}
+                />
+            ))}
         </div>
     )
 }
 
-function Post({
-    token,
-    index,
-}: {
-    token: string,
-    index: number,
-}) {
-    const { data, isLoading } = usePost(index);
+function Post(props: PostItem) {
+    const {author, cid, web3StorageAccessToken:token} = props;
     const [showMore, setShowMore] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [postContent, setPostContent] = useState<PostContent|null>(null);
     const postContentLimit = 200;
 
     useEffect(() => {
-        if (data) {
-            const cid = (data as any[])[0];
-            (async () => {
-                const res = await getPostContent(token, cid);
-                setPostContent(res)
-            })();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+        (async () => {
+            setLoading(true)
+            const res = await getPostContent(token, cid);
+            setLoading(false);
+            setPostContent(res)
+        })();
+    }, [cid, token])
 
-    if (isLoading) {
+    if (loading) {
         return <Skeleton />
     }
 
@@ -70,7 +87,7 @@ function Post({
 
     const postInfo: PostInfo = {
         ...postContent,
-        author: (data as any[])[1],
+        author,
         web3StorageAccessToken: token,
     }
 

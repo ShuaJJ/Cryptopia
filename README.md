@@ -17,3 +17,7 @@ forge verify-contract \
 ```
 ADDRESS=0x92A2E7BA8446400C7407275e8Dc1FDAcED30E2Cf npm run verify:user:<chain>
 ```
+
+### Subgraph endpoints:
+
+https://api.studio.thegraph.com/query/49276/cryptopia-sepolia/v0.0.1

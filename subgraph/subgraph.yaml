@@ -1,0 +1,53 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Post
+    network: sepolia
+    source:
+      address: "0x194187C7eBD0C241Cd73BE39380F1a39de785285"
+      abi: Post
+      startBlock: 4519609
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Comment
+        - CreatePost
+      abis:
+        - name: Post
+          file: ./abis/Post.json
+      eventHandlers:
+        - event: Comment(address,string)
+          handler: handleComment
+        - event: CreatePost(indexed address,indexed uint8,string)
+          handler: handleCreatePost
+      file: ./src/post.ts
+  - kind: ethereum
+    name: User
+    network: sepolia
+    source:
+      address: "0x983542016D5417Cf36A10521756a790c2c5BFDA3"
+      abi: User
+      startBlock: 4519609
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Follow
+        - OwnershipTransferred
+        - Verify
+      abis:
+        - name: User
+          file: ./abis/User.json
+      eventHandlers:
+        - event: Follow(indexed address,indexed address)
+          handler: handleFollow
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Verify(address,string)
+          handler: handleVerify
+      file: ./src/user.ts

@@ -12,10 +12,16 @@ export default function UserModal({
     description: string,
     close: () => void,
 }) {
+
+    const follow = () => {
+        
+    }
+
+
     return (
         <Modal>
             <div
-                className="absolute right-1 top-0 cursor-pointer text-lg p-4"
+                className="absolute right-1 top-0 cursor-pointer text-lg p-4 max-h-96 overflow-y-scroll"
                 onClick={(e) => { 
                     e.stopPropagation();
                     close()

@@ -2,13 +2,32 @@
 
 import { usePost } from "@/hooks/usePost";
 import getPostContent from "@/utils/getPostContent";
-import { AccessTokenProps, PostContent, PostInfo } from "@/utils/types";
+import { AccessTokenProps, PostContent, PostInfo, TxProps } from "@/utils/types";
 import { useEffect, useState } from "react";
 import Skeleton from "./Skeleton";
 import RandomAvatar from "./RandomAvatar";
+import { useAddRecentTransaction } from '@rainbow-me/rainbowkit';
+import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import ImageViewer from "./ImageViewer";
+import { useContract } from "@/hooks/useContract";
 
 export default function PostList({ web3StorageAccessToken } : AccessTokenProps) {
+
+    const { data: walletClient } = useWalletClient()
+    const publicClient = usePublicClient();
+    const userContract = useContract('User');
+    const postContract = useContract('Post');
+    const addRecentTransaction = useAddRecentTransaction();
+    const { address } = useAccount();
+
+    const props: TxProps = {
+        walletClient,
+        publicClient,
+        account: address,
+        addRecentTransaction,
+        web3StorageAccessToken,
+    }
+
     return (
         <div className="flex flex-col gap-6 pb-24">
             <Post token={web3StorageAccessToken} index={0} />

@@ -10,6 +10,7 @@ import Image from "next/image";
 import UserInfo from "../user/UserInfo";
 import PostForm from "./PostForm";
 import { POST_TITLES } from "@/utils/constants";
+import Modal from "../Modal";
 
 export default function NewPost({
     web3StorageAccessToken,
@@ -75,34 +76,32 @@ export default function NewPost({
 
 
     return (
-        <div className="absolute left-0 right-0 top-0 bottom-0 backdrop-blur-sm bg-white/40 flex items-center justify-center">
-            <div className="bg-white py-12 px-16 rounded-3xl relative">
-                {type && (
-                    <div 
-                        className="absolute left-3 top-3 inline-block p-4"
-                        onClick={() => { 
-                            setType(undefined);
-                            setNeedVerify(false); 
-                        }}
-                    >
-                        <Image src={backIcon} alt="back" />
-                    </div>
-                )}
+        <Modal>
+            {type && (
                 <div 
-                    className="absolute right-3 top-3 inline-block p-2 text-[#1C1C1C] text-lg cursor-pointer"
+                    className="absolute left-3 top-3 inline-block p-4"
                     onClick={() => { 
                         setType(undefined);
-                        setNeedVerify(false);
-                        setShow(false);
+                        setNeedVerify(false); 
                     }}
                 >
-                    X
+                    <Image src={backIcon} alt="back" />
                 </div>
-                <div className="text-center text-xl mb-6 font-semibold max-w-xs mt-8">
-                    {title}
-                </div>
-                {modalBody()}
+            )}
+            <div 
+                className="absolute right-3 top-3 inline-block p-2 text-[#1C1C1C] text-lg cursor-pointer"
+                onClick={() => { 
+                    setType(undefined);
+                    setNeedVerify(false);
+                    setShow(false);
+                }}
+            >
+                X
             </div>
-        </div>
+            <div className="text-center text-xl mb-6 font-semibold max-w-xs mt-8">
+                {title}
+            </div>
+            {modalBody()}
+        </Modal>
     )
 }

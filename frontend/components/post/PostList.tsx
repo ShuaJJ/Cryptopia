@@ -26,7 +26,9 @@ function Post({
     index: number,
 }) {
     const { data, isLoading } = usePost(index);
+    const [showMore, setShowMore] = useState(false);
     const [postContent, setPostContent] = useState<PostContent|null>(null);
+    const postContentLimit = 200;
 
     useEffect(() => {
         if (data) {
@@ -53,12 +55,25 @@ function Post({
         web3StorageAccessToken: token,
     }
 
+    const content = postContent.content ?? '';
+
     return (
         <div className="bg-white shadow rounded-lg py-6">
             <RandomAvatar { ...postInfo } />
             <ImageViewer url={postContent.image} />
             <div className="p-6 text-gray-600">
-                {postContent.content}
+                {content.length < postContentLimit ? <>{postContent.content}</> : (
+                    <>
+                        <span>{content.substring(0, postContentLimit)}</span>
+                        {showMore && <span>{content.substring(postContentLimit)}</span>}
+                        <span 
+                            className="text-purple-dark underline cursor-pointer pl-2"
+                            onClick={() => { setShowMore(!showMore) }}
+                        >
+                            show more
+                        </span>
+                    </>
+                )}
             </div>
         </div>
     )

@@ -5,6 +5,7 @@ struct PostItem {
     string cid;
     address author;
     uint8 postType;
+    uint256 updatedAt;
 }
 
 contract Post {
@@ -27,12 +28,13 @@ contract Post {
         PostItem memory post = PostItem({
             cid: cid,
             author: msg.sender,
-            postType: postType
+            postType: postType,
+            updatedAt: block.timestamp
         });
         myPosts[msg.sender].push(post);
         allPosts.push(post);
         emit CreatePost(msg.sender, postType, cid);
-    }  
+    }
 
     function comment(string memory content) external {
         emit Comment(msg.sender, content);

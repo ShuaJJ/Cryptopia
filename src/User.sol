@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract User is Ownable {
 
-    event Follow(address indexed follower, address indexed follow);
+    event Follow(address indexed follower, address indexed follow, string cid);
     event Verify(address user, string cid);
+    event ApplyVerify(address user, string cid);
 
     mapping(address user => string cid) public userInfo;
     // 0 is not verified; 1 is pending; 2 is verified
@@ -26,6 +27,7 @@ contract User is Ownable {
         require(verified[msg.sender] == 0, "Already applied");
         userInfo[msg.sender] = cid;
         verified[msg.sender] = 1;
+        emit ApplyVerify(msg.sender, cid);
     }
 
     function updateUserInfo(string memory cid) external {
@@ -36,6 +38,6 @@ contract User is Ownable {
         require(!followed[msg.sender][user], "Already followed");
         myFollows[msg.sender].push(user);
         followed[msg.sender][user] = true;
-        emit Follow(msg.sender, user);
+        emit Follow(msg.sender, user, userInfo[user]);
     }
 }

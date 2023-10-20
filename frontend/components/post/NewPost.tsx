@@ -76,7 +76,11 @@ export default function NewPost({
 
 
     return (
-        <Modal>
+        <Modal close={() => {
+            setType(undefined);
+            setNeedVerify(false);
+            setShow(false);
+        }}>
             {type && (
                 <div 
                     className="absolute left-3 top-3 inline-block p-4"
@@ -88,16 +92,6 @@ export default function NewPost({
                     <Image src={backIcon} alt="back" />
                 </div>
             )}
-            <div 
-                className="absolute right-3 top-3 inline-block p-2 text-[#1C1C1C] text-lg cursor-pointer"
-                onClick={() => { 
-                    setType(undefined);
-                    setNeedVerify(false);
-                    setShow(false);
-                }}
-            >
-                X
-            </div>
             <div className="text-center text-xl mb-6 font-semibold max-w-xs mt-8">
                 {title}
             </div>

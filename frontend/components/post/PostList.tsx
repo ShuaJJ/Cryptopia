@@ -10,6 +10,8 @@ import { useAddRecentTransaction } from '@rainbow-me/rainbowkit';
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import ImageViewer from "./ImageViewer";
 import { useContract } from "@/hooks/useContract";
+import Image from 'next/image';
+import chatIcon from '@/public/chat.png';
 
 export default function PostList({ web3StorageAccessToken } : AccessTokenProps) {
 
@@ -104,6 +106,15 @@ function Post(props: PostItem) {
                         </span>
                     </>
                 )}
+            </div>
+            <div className='flex items-center justify-end text-gray-600 pr-4'>
+                <Image 
+                    src={chatIcon} 
+                    alt="chat" 
+                    className='inline-block mr-2'
+                    width={24}
+                    height={24}
+                /> Leave a comment
             </div>
         </div>
     )

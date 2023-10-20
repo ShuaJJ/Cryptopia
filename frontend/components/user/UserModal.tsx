@@ -1,31 +1,30 @@
+import { useFollowed } from "@/hooks/useFollowed";
 import Modal from "../Modal";
 import MainButton from "../button/MainButton";
+import { Address } from "viem";
 
 export default function UserModal({
     logo,
     name,
     description,
+    myAddress,
+    author,
     close,
     follow,
 } : {
     logo: string,
     name: string,
     description: string,
+    myAddress?: Address,
+    author: Address,
     close: () => void,
-    follow: () => void,
+    follow: (callback: () => void) => void,
 }) {
 
+    const { data: followed, isLoading, refetch} = useFollowed(author, myAddress);
+
     return (
-        <Modal>
-            <div
-                className="absolute right-1 top-0 cursor-pointer text-lg p-4 max-h-96 overflow-y-scroll"
-                onClick={(e) => { 
-                    e.stopPropagation();
-                    close()
-                 }}
-            >
-                X
-            </div>
+        <Modal close={close}>
             <div className="flex flex-col gap-4 items-center justify-center min-w-[320px] max-w-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */} 
                 <img 
@@ -37,9 +36,14 @@ export default function UserModal({
                 <div className="text-gray-400 mb-8 text-sm">{description}</div>
                 <MainButton
                     secondary
-                    onClick={follow}
+                    loading={isLoading}
+                    onClick={() => {
+                        if (!followed) {
+                            follow(refetch)
+                        }
+                    }}
                 >
-                    Follow
+                    {followed ? 'Followed' : 'Follow'}
                 </MainButton>
                 <MainButton
                     onClick={() => {

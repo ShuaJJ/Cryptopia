@@ -38,9 +38,9 @@ export default function RandomAvatar({
         setShowUserModal(false);
     }
 
-    const follow = () => {
+    const follow = async (callback: () => void) => {
         if (account && userContract && publicClient && walletClient) {
-            sendTx(
+            await sendTx(
                 'Follow',
                 account,
                 userContract,
@@ -50,6 +50,7 @@ export default function RandomAvatar({
                 addRecentTransaction,
                 [author]
             )
+            callback();
         } else {
             toast('Please make sure you are connected', { position: 'top-center'})
         }
@@ -57,35 +58,42 @@ export default function RandomAvatar({
     }
 
     return (
-        <div 
-            className="flex gap-3 items-center px-6 mb-4"
-        >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-                src={avatar} 
-                alt="avatar" 
-                className="rounded-full cursor-pointer"
-                width={60} 
-                height={60} 
-                onClick={() => {
-                    setShowUserModal(true)
-                }}
-            />
-            <div className="grow-0">
-                <div className="text-sm font-semibold">{username}</div>
-                {authorInfo?.description && (
-                    <div className="text-xs text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap w-96">{authorInfo.description}</div>
-                )}
+        <>
+            <div 
+                className="flex gap-3 items-center px-6 mb-4"
+            >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                    src={avatar} 
+                    alt="avatar" 
+                    className="rounded-full cursor-pointer flex-none block"
+                    width={60} 
+                    height={60} 
+                    onClick={() => {
+                        setShowUserModal(true)
+                    }}
+                />
+                <div className="flex-1">
+                    <div className="text-sm font-semibold">{username}</div>
+                    {authorInfo?.description && (
+                        <div className="text-xs text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap w-96">{authorInfo.description}</div>
+                    )}
+                </div>
+                <div className="flex-none">
+                    { authorInfo?.type }
+                </div>
             </div>
             {showUserModal && (
                 <UserModal 
                     logo={avatar} 
                     name={username} 
                     description={authorInfo?.description ?? ''} 
+                    author={author}
+                    myAddress={account}
                     close={close}
                     follow={follow}
                 />
             )}
-        </div>
+        </>
     )
 }

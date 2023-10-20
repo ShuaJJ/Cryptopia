@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract User is Ownable {
 
@@ -15,7 +15,7 @@ contract User is Ownable {
     mapping(address user => address[] follows) public myFollows;
     mapping(address user => mapping(address target => bool isFollowed)) public followed;
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    constructor(address initialOwner) Ownable(initialOwner) { }
 
     function verify(address user) external onlyOwner {
         require(bytes(userInfo[user]).length > 0, "Project info not uploaded");

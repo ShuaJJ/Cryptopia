@@ -4,6 +4,7 @@ import PostButton from '@/components/button/PostButton'
 import { AccessTokenProps } from "@/utils/types";
 import PostList from "@/components/post/PostList";
 import GraphProvider from "@/components/GraphProvider";
+import ChatList from "@/components/push/ChatList";
 
 export default function Home() {
 
@@ -25,6 +26,9 @@ export default function Home() {
             <div>
               <WhiteBox>
                 <PostButton { ...accessTokens } />
+              </WhiteBox>
+              <WhiteBox>
+                <ChatList {...accessTokens} />
               </WhiteBox>
             </div>
         </div>

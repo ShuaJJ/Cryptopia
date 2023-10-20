@@ -12,6 +12,7 @@ import ImageViewer from "./ImageViewer";
 import { useContract } from "@/hooks/useContract";
 import Image from 'next/image';
 import chatIcon from '@/public/chat.png';
+import EmptyText from '../EmptyText';
 
 export default function PostList({ web3StorageAccessToken } : AccessTokenProps) {
 
@@ -40,7 +41,7 @@ export default function PostList({ web3StorageAccessToken } : AccessTokenProps) 
     }
 
     if (posts.length == 0) {
-        return <div className='text-center mt-8'>No posts yet...</div>
+        return <EmptyText text='No posts yet...' />
     }
 
     return (

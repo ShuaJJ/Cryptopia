@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
+    "@pushprotocol/restapi": "^1.4.28",
+    "@pushprotocol/socket": "^0.5.2",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "encoding": "^0.1.13",
+    "ethers": "^5.7.2",
     "graphql": "^16.8.1",
     "lokijs": "^1.5.12",
     "next": "13.5.4",

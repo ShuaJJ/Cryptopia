@@ -90,6 +90,7 @@ export default function RandomAvatar({
                     description={authorInfo?.description ?? ''} 
                     author={author}
                     myAddress={account}
+                    walletClient={walletClient}
                     close={close}
                     follow={follow}
                 />

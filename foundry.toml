@@ -43,3 +43,4 @@
   sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
   polygon_mumbai = "https://polygon-mumbai.infura.io/v3/${API_KEY_INFURA}"
   arbitrum_goerli = "https://arbitrum-goerli.infura.io/v3/${API_KEY_INFURA}"
+  scroll_sepolia = "https://sepolia-rpc.scroll.io"

@@ -1,13 +1,13 @@
 {
-  "name": "cryptopia-scroll",
+  "name": "cryptopia-polygon",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ cryptopia-scroll",
-    "create-local": "graph create --node http://localhost:8020/ cryptopia-scroll",
-    "remove-local": "graph remove --node http://localhost:8020/ cryptopia-scroll",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 cryptopia-scroll",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ cryptopia-polygon",
+    "create-local": "graph create --node http://localhost:8020/ cryptopia-polygon",
+    "remove-local": "graph remove --node http://localhost:8020/ cryptopia-polygon",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 cryptopia-polygon",
     "test": "graph test"
   },
   "dependencies": {

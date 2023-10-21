@@ -10,13 +10,19 @@ import {
     SismoConnectHelper,
     AuthType
 } from "sismo-connect-solidity/SismoConnectLib.sol";
+import { IWormholeRelayer } from "wormhole-relayer/interfaces/IWormholeRelayer.sol";
+import { IWormholeReceiver } from "wormhole-relayer/interfaces/IWormholeReceiver.sol";
 
-contract User is Ownable, SismoConnect {
+contract User is Ownable, SismoConnect, IWormholeReceiver {
 
     event Follow(address indexed follower, address indexed follow, string cid);
     event Verify(address user, string cid);
     event ApplyVerify(address user, string cid);
     event ResponseVerified(SismoConnectVerifiedResult result);
+    event VerificationReceived(address sender, uint16 sourceChain);
+
+    IWormholeRelayer public immutable wormholeRelayer;
+    mapping(bytes32 hashed => bool seen) public seenDeliveryVaaHashes;
 
     mapping(address user => string cid) public userInfo;
     // 0 is not verified; 1 is pending; 2 is verified
@@ -58,6 +64,42 @@ contract User is Ownable, SismoConnect {
         require(bytes(userInfo[msg.sender]).length > 0, "Project info not uploaded");
         verified[msg.sender] = 2;
         emit Verify(msg.sender, userInfo[msg.sender]);
+
+        if (block.chainid == 11155111 || block.chainid == 80001) {
+            // send verified user address to other supported chains as well
+            wormholeRelayer.sendPayloadToEvm(
+                block.chainid == 11155111 ? 80001 : 11155111, // send to another supported chain
+                address(this),
+                abi.encode(userInfo[msg.sender], msg.sender),
+                0, // no receiver value needed
+                50_000
+            );
+        }
+    }
+
+    function receiveWormholeMessages(
+        bytes memory payload,
+        bytes[] memory, // additionalVaas
+        bytes32 sourceAddress,
+        uint16 sourceChain,
+        bytes32 // deliveryHash
+    ) public payable override {
+        require(msg.sender == address(this), "Only relayer allowed");
+
+        // Ensure no duplicate deliveries
+        require(!seenDeliveryVaaHashes[deliveryHash], "Message already processed");
+        seenDeliveryVaaHashes[deliveryHash] = true;
+
+        // Parse the payload and do the corresponding actions!
+
+        (string memory senderInfo, address sender) = abi.decode(payload, (string, address));
+        userInfo[sender] = senderInfo;
+        verified[sender] = 2;
+        emit Verify(sender, senderInfo);
+        emit VerificationReceived(
+            sender,
+            sourceChain
+        );
     }
 
     function applyVerify(string memory cid) external {

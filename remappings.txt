@@ -2,3 +2,4 @@
 forge-std/=lib/forge-std/src/
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
 sismo-connect-solidity/=lib/sismo-connect-solidity/src/
+wormhole-relayer/=lib/wormhole-solidity-sdk/src/

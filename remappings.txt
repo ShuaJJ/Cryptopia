@@ -1,5 +1,8 @@
-@prb/test/=lib/prb-test/src/
-forge-std/=lib/forge-std/src/
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
-sismo-connect-solidity/=lib/sismo-connect-solidity/src/
-wormhole-relayer/=lib/wormhole-solidity-sdk/src/
+ds-test/=lib/forge-std/lib/ds-test/src/
+erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/
+forge-std/=lib/forge-std/src/
+openzeppelin-contracts/=lib/openzeppelin-contracts/
+prb-test/=lib/prb-test/src/
+sismo-connect-solidity/=lib/sismo-connect-solidity/
+wormhole-solidity-sdk/=lib/wormhole-solidity-sdk/src/

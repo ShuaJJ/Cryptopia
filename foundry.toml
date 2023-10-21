@@ -24,6 +24,8 @@
 [etherscan]
   mainnet = { key = "${API_KEY_ETHERSCAN}" }
   sepolia = { key = "${API_KEY_ETHERSCAN}" }
+  polygon_mumbai = { key = "${API_KEY_POLYGONSCAN}" }
+  arbitrum_goerli = { key = "${API_KEY_ARBISCAN}" }
 
 [fmt]
   bracket_spacing = true
@@ -39,3 +41,5 @@
   localhost = "http://localhost:8545"
   mainnet = "https://eth-mainnet.infura.io/v3/${API_KEY_INFURA}"
   sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
+  polygon_mumbai = "https://polygon-mumbai.infura.io/v3/${API_KEY_INFURA}"
+  arbitrum_goerli = "https://arbitrum-goerli.infura.io/v3/${API_KEY_INFURA}"

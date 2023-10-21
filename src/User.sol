@@ -9,9 +9,9 @@ import {
     ClaimRequest,
     SismoConnectHelper,
     AuthType
-} from "sismo-connect-solidity/SismoConnectLib.sol";
-import { IWormholeRelayer } from "wormhole-relayer/interfaces/IWormholeRelayer.sol";
-import { IWormholeReceiver } from "wormhole-relayer/interfaces/IWormholeReceiver.sol";
+} from "sismo-connect-solidity/src/SismoConnectLib.sol";
+import { IWormholeRelayer } from "wormhole-solidity-sdk/interfaces/IWormholeRelayer.sol";
+import { IWormholeReceiver } from "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
 
 contract User is Ownable, SismoConnect, IWormholeReceiver {
 
@@ -21,6 +21,7 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
     event ResponseVerified(SismoConnectVerifiedResult result);
     event VerificationReceived(address sender, uint16 sourceChain);
 
+    uint256 constant GAS_LIMIT = 50_000;
     IWormholeRelayer public immutable wormholeRelayer;
     mapping(bytes32 hashed => bool seen) public seenDeliveryVaaHashes;
 
@@ -38,7 +39,11 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
                 isImpersonationMode: true
             })
         )
-    {}
+    {
+        address _relayer = block.chainid == 80001 ? 
+            0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0 : 0xAd753479354283eEE1b86c9470c84D42f229FF43;
+        wormholeRelayer = IWormholeRelayer(_relayer);
+    }
 
     function verifySismoConnectResponse(bytes memory response) public {
         AuthRequest[] memory auths = new AuthRequest[](1);
@@ -65,14 +70,15 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
         verified[msg.sender] = 2;
         emit Verify(msg.sender, userInfo[msg.sender]);
 
-        if (block.chainid == 11155111 || block.chainid == 80001) {
+
+        if (block.chainid == 421613 || block.chainid == 80001) {
             // send verified user address to other supported chains as well
             wormholeRelayer.sendPayloadToEvm(
-                block.chainid == 11155111 ? 80001 : 11155111, // send to another supported chain
+                block.chainid == 421613 ? 80001 : 421613,
                 address(this),
                 abi.encode(userInfo[msg.sender], msg.sender),
-                0, // no receiver value needed
-                50_000
+                0,
+                GAS_LIMIT
             );
         }
     }
@@ -82,7 +88,7 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
         bytes[] memory, // additionalVaas
         bytes32 sourceAddress,
         uint16 sourceChain,
-        bytes32 // deliveryHash
+        bytes32 deliveryHash
     ) public payable override {
         require(msg.sender == address(this), "Only relayer allowed");
 

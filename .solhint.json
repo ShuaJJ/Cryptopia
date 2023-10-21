@@ -2,11 +2,11 @@
   "extends": "solhint:recommended",
   "rules": {
     "code-complexity": ["error", 8],
-    "compiler-version": ["error", ">=0.8.21"],
+    "compiler-version": ["error", ">=0.8.0"],
     "func-name-mixedcase": "off",
     "no-empty-blocks": "off",
     "func-visibility": ["error", { "ignoreConstructors": true }],
-    "max-line-length": ["error", 120],
+    "max-line-length": "off",
     "named-parameters-mapping": "warn",
     "no-console": "off",
     "not-rely-on-time": "off",

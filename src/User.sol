@@ -10,7 +10,7 @@ import {
     SismoConnectHelper,
     AuthType
 } from "sismo-connect-solidity/src/SismoConnectLib.sol";
-import { IWormholeRelayer } from "wormhole-solidity-sdk/interfaces/IWormholeRelayer.sol";
+import { IWormholeRelayer } from "./interfaces/IWormholeRelayer.sol";
 import { IWormholeReceiver } from "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
 
 contract User is Ownable, SismoConnect, IWormholeReceiver {
@@ -74,7 +74,7 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
         if (block.chainid == 421613 || block.chainid == 80001) {
             // send verified user address to other supported chains as well
             wormholeRelayer.sendPayloadToEvm(
-                block.chainid == 421613 ? 80001 : 421613,
+                uint16(block.chainid == 421613 ? 80001 : 421613),
                 address(this),
                 abi.encode(userInfo[msg.sender], msg.sender),
                 0,

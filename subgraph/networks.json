@@ -1,11 +1,8 @@
 {
-  "sepolia": {
-    "Post": {
-      "address": "0x194187C7eBD0C241Cd73BE39380F1a39de785285",
-      "startBlock": 4519609
-    },
+  "scroll-sepolia": {
     "User": {
-      "address": "0x983542016D5417Cf36A10521756a790c2c5BFDA3"
+      "address": "0xC97d5D78E72f9e782559274BE158aEb30cab8a8C",
+      "startBlock": 1763689
     }
   }
 }

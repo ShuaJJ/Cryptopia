@@ -8,6 +8,13 @@
   },
   {
     "inputs": [
+      { "internalType": "enum AuthType", "name": "authType", "type": "uint8" }
+    ],
+    "name": "AuthTypeNotFoundInVerifiedResult",
+    "type": "error"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "owner", "type": "address" }
     ],
     "name": "OwnableInvalidOwner",
@@ -24,6 +31,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
+      }
+    ],
+    "name": "ApplyVerify",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "follower",
@@ -34,6 +60,12 @@
         "internalType": "address",
         "name": "follow",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "cid",
+        "type": "string"
       }
     ],
     "name": "Follow",
@@ -62,6 +94,94 @@
     "anonymous": false,
     "inputs": [
       {
+        "components": [
+          { "internalType": "bytes16", "name": "appId", "type": "bytes16" },
+          { "internalType": "bytes16", "name": "namespace", "type": "bytes16" },
+          { "internalType": "bytes32", "name": "version", "type": "bytes32" },
+          {
+            "components": [
+              {
+                "internalType": "enum AuthType",
+                "name": "authType",
+                "type": "uint8"
+              },
+              { "internalType": "bool", "name": "isAnon", "type": "bool" },
+              {
+                "internalType": "uint256",
+                "name": "userId",
+                "type": "uint256"
+              },
+              { "internalType": "bytes", "name": "extraData", "type": "bytes" },
+              { "internalType": "bytes", "name": "proofData", "type": "bytes" }
+            ],
+            "internalType": "struct VerifiedAuth[]",
+            "name": "auths",
+            "type": "tuple[]"
+          },
+          {
+            "components": [
+              {
+                "internalType": "enum ClaimType",
+                "name": "claimType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "bytes16",
+                "name": "groupId",
+                "type": "bytes16"
+              },
+              {
+                "internalType": "bytes16",
+                "name": "groupTimestamp",
+                "type": "bytes16"
+              },
+              { "internalType": "uint256", "name": "value", "type": "uint256" },
+              { "internalType": "bytes", "name": "extraData", "type": "bytes" },
+              {
+                "internalType": "uint256",
+                "name": "proofId",
+                "type": "uint256"
+              },
+              { "internalType": "bytes", "name": "proofData", "type": "bytes" }
+            ],
+            "internalType": "struct VerifiedClaim[]",
+            "name": "claims",
+            "type": "tuple[]"
+          },
+          { "internalType": "bytes", "name": "signedMessage", "type": "bytes" }
+        ],
+        "indexed": false,
+        "internalType": "struct SismoConnectVerifiedResult",
+        "name": "result",
+        "type": "tuple"
+      }
+    ],
+    "name": "ResponseVerified",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "sourceChain",
+        "type": "uint16"
+      }
+    ],
+    "name": "VerificationReceived",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "address",
         "name": "user",
@@ -78,10 +198,72 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "ADDRESSES_PROVIDER_V2",
+    "outputs": [
+      {
+        "internalType": "contract IAddressesProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "APP_ID",
+    "outputs": [{ "internalType": "bytes16", "name": "", "type": "bytes16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "IS_IMPERSONATION_MODE",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "SISMO_CONNECT_LIB_VERSION",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [{ "internalType": "string", "name": "cid", "type": "string" }],
     "name": "applyVerify",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "config",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "bytes16", "name": "appId", "type": "bytes16" },
+          {
+            "components": [
+              {
+                "internalType": "bool",
+                "name": "isImpersonationMode",
+                "type": "bool"
+              }
+            ],
+            "internalType": "struct VaultConfig",
+            "name": "vault",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct SismoConnectConfig",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -107,6 +289,15 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "githubId", "type": "uint256" }
+    ],
+    "name": "githubVerified",
+    "outputs": [{ "internalType": "bool", "name": "verified", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "user", "type": "address" },
       { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
@@ -125,10 +316,32 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "bytes", "name": "payload", "type": "bytes" },
+      { "internalType": "bytes[]", "name": "", "type": "bytes[]" },
+      { "internalType": "bytes32", "name": "sourceAddress", "type": "bytes32" },
+      { "internalType": "uint16", "name": "sourceChain", "type": "uint16" },
+      { "internalType": "bytes32", "name": "deliveryHash", "type": "bytes32" }
+    ],
+    "name": "receiveWormholeMessages",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "hashed", "type": "bytes32" }
+    ],
+    "name": "seenDeliveryVaaHashes",
+    "outputs": [{ "internalType": "bool", "name": "seen", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -169,11 +382,24 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" }
+      { "internalType": "bytes", "name": "response", "type": "bytes" }
     ],
-    "name": "verify",
+    "name": "verifySismoConnectResponse",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "wormholeRelayer",
+    "outputs": [
+      {
+        "internalType": "contract IWormholeRelayer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

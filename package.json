@@ -34,6 +34,9 @@
     "deploy:user:local": "forge script script/DeployUser.s.sol --broadcast --fork-url http://localhost:8545",
     "deploy:post:local": "forge script script/DeployPost.s.sol --broadcast --fork-url http://localhost:8545",
 
+    "deploy:user:scroll_sepolia": "forge script script/DeployUser.s.sol --rpc-url https://sepolia-rpc.scroll.io/ --broadcast --legacy",
+    "deploy:post:scroll_sepolia": "forge script script/DeployPost.s.sol --rpc-url https://sepolia-rpc.scroll.io/ --broadcast --legacy",
+
     "deploy:user:sepolia": "forge script script/DeployUser.s.sol --rpc-url https://sepolia.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ETHERSCAN",
     "deploy:post:sepolia": "forge script script/DeployPost.s.sol --rpc-url https://sepolia.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ETHERSCAN",
 

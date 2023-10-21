@@ -1,25 +1,17 @@
-type Comment @entity(immutable: true) {
+type ApplyVerify @entity(immutable: true) {
   id: Bytes!
   user: Bytes! # address
-  content: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CreatePost @entity(immutable: true) {
-  id: Bytes!
-  author: Bytes! # address
-  postType: Int! # uint8
   cid: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
 type Follow @entity(immutable: true) {
   id: Bytes!
   follower: Bytes! # address
   follow: Bytes! # address
+  cid: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -29,6 +21,28 @@ type OwnershipTransferred @entity(immutable: true) {
   id: Bytes!
   previousOwner: Bytes! # address
   newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResponseVerified @entity(immutable: true) {
+  id: Bytes!
+  result_appId: Bytes! # bytes16
+  result_namespace: Bytes! # bytes16
+  result_version: Bytes! # bytes32
+  result_auths: [Bytes!]! # tuple[]
+  result_claims: [Bytes!]! # tuple[]
+  result_signedMessage: Bytes! # bytes
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VerificationReceived @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  sourceChain: Int! # uint16
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

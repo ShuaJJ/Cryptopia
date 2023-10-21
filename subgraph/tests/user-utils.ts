@@ -1,8 +1,37 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, Address } from "@graphprotocol/graph-ts"
-import { Follow, OwnershipTransferred, Verify } from "../generated/User/User"
+import {
+  ApplyVerify,
+  Follow,
+  OwnershipTransferred,
+  ResponseVerified,
+  VerificationReceived,
+  Verify
+} from "../generated/User/User"
 
-export function createFollowEvent(follower: Address, follow: Address): Follow {
+export function createApplyVerifyEvent(
+  user: Address,
+  cid: string
+): ApplyVerify {
+  let applyVerifyEvent = changetype<ApplyVerify>(newMockEvent())
+
+  applyVerifyEvent.parameters = new Array()
+
+  applyVerifyEvent.parameters.push(
+    new ethereum.EventParam("user", ethereum.Value.fromAddress(user))
+  )
+  applyVerifyEvent.parameters.push(
+    new ethereum.EventParam("cid", ethereum.Value.fromString(cid))
+  )
+
+  return applyVerifyEvent
+}
+
+export function createFollowEvent(
+  follower: Address,
+  follow: Address,
+  cid: string
+): Follow {
   let followEvent = changetype<Follow>(newMockEvent())
 
   followEvent.parameters = new Array()
@@ -12,6 +41,9 @@ export function createFollowEvent(follower: Address, follow: Address): Follow {
   )
   followEvent.parameters.push(
     new ethereum.EventParam("follow", ethereum.Value.fromAddress(follow))
+  )
+  followEvent.parameters.push(
+    new ethereum.EventParam("cid", ethereum.Value.fromString(cid))
   )
 
   return followEvent
@@ -38,6 +70,43 @@ export function createOwnershipTransferredEvent(
   )
 
   return ownershipTransferredEvent
+}
+
+export function createResponseVerifiedEvent(
+  result: ethereum.Tuple
+): ResponseVerified {
+  let responseVerifiedEvent = changetype<ResponseVerified>(newMockEvent())
+
+  responseVerifiedEvent.parameters = new Array()
+
+  responseVerifiedEvent.parameters.push(
+    new ethereum.EventParam("result", ethereum.Value.fromTuple(result))
+  )
+
+  return responseVerifiedEvent
+}
+
+export function createVerificationReceivedEvent(
+  sender: Address,
+  sourceChain: i32
+): VerificationReceived {
+  let verificationReceivedEvent = changetype<VerificationReceived>(
+    newMockEvent()
+  )
+
+  verificationReceivedEvent.parameters = new Array()
+
+  verificationReceivedEvent.parameters.push(
+    new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
+  )
+  verificationReceivedEvent.parameters.push(
+    new ethereum.EventParam(
+      "sourceChain",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(sourceChain))
+    )
+  )
+
+  return verificationReceivedEvent
 }
 
 export function createVerifyEvent(user: Address, cid: string): Verify {

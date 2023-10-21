@@ -1,6 +1,7 @@
 import { Chain } from '@wagmi/core'
 import {
-    sepolia,
+    polygonMumbai,
+    arbitrumGoerli
   } from 'wagmi/chains';
 import * as AllContracts from "../contract/contracts.json";
 
@@ -26,7 +27,8 @@ export const localhost = {
 } as const satisfies Chain
 
 export const SUPPORTED_CHAINS = [
-    sepolia,
+    polygonMumbai,
+    arbitrumGoerli,
     localhost
 ];
 

@@ -1,3 +1,5 @@
+Cryptopia is a web3 professional social platform. It's fully decentralized, all data are stored in blockchains. All queries are done using The Graph. Here at Cryptopia, project owners can post airdrops, events, jobs and announcements. But only verified project owners can post. So at Cryptopia, there are much less spams. Users can also post, some gas fee may be charged though. This will prevent abusing.
+
 ### To verify contract:
 
 ```

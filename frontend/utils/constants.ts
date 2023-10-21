@@ -53,4 +53,4 @@ export const contractPostType = (type: string) => {
 
 export const ipfsDomain = "ipfs.w3s.link";
 
-export const graphUri = "https://api.studio.thegraph.com/query/49276/cryptopia-sepolia/v0.0.1";
+export const graphUri = "https://api.studio.thegraph.com/query/49276/cryptopia-polygon/v0.0.1";

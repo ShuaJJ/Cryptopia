@@ -26,19 +26,6 @@ type OwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ResponseVerified @entity(immutable: true) {
-  id: Bytes!
-  result_appId: Bytes! # bytes16
-  result_namespace: Bytes! # bytes16
-  result_version: Bytes! # bytes32
-  result_auths: [Bytes!]! # tuple[]
-  result_claims: [Bytes!]! # tuple[]
-  result_signedMessage: Bytes! # bytes
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type VerificationReceived @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
@@ -51,6 +38,24 @@ type VerificationReceived @entity(immutable: true) {
 type Verify @entity(immutable: true) {
   id: Bytes!
   user: Bytes! # address
+  cid: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type Comment @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  content: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CreatePost @entity(immutable: true) {
+  id: Bytes!
+  author: Bytes! # address
+  postType: Int! # uint8
   cid: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!

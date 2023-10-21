@@ -3,6 +3,9 @@
     "User": {
       "address": "0xC97d5D78E72f9e782559274BE158aEb30cab8a8C",
       "startBlock": 41466117
+    },
+    "Post": {
+      "address": "0x235cddbf69af897C3299083642450740871251D8"
     }
   }
 }

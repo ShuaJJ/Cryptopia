@@ -4,6 +4,12 @@ coverage
 node_modules
 out
 
+#subgraph
+generated
+subgraph/tests/
+subgraph/abis/
+subgraph/build/
+
 # files
 *.env
 *.log

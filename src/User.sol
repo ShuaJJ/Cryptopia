@@ -2,7 +2,14 @@
 pragma solidity ^0.8.21;
 
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { SismoConnect } from "sismo-connect-solidity/SismoConnectLib.sol";
+import { 
+    SismoConnect, 
+    SismoConnectVerifiedResult, 
+    AuthRequest,
+    ClaimRequest,
+    SismoConnectHelper,
+    AuthType
+} from "sismo-connect-solidity/SismoConnectLib.sol";
 
 contract User is Ownable, SismoConnect {
 
@@ -14,7 +21,7 @@ contract User is Ownable, SismoConnect {
     mapping(address user => string cid) public userInfo;
     // 0 is not verified; 1 is pending; 2 is verified
     mapping(address user => uint8 isVerified) public verified;
-    mapping(string githubId => bool verified) public githubVerified;
+    mapping(uint256 githubId => bool verified) public githubVerified;
     mapping(address user => address[] follows) public myFollows;
     mapping(address user => mapping(address target => bool isFollowed)) public followed;
 
@@ -48,9 +55,9 @@ contract User is Ownable, SismoConnect {
         require(!githubVerified[githubId], "This githubId already verified");
         githubVerified[githubId] = true;
 
-        require(bytes(userInfo[user]).length > 0, "Project info not uploaded");
-        verified[user] = 2;
-        emit Verify(user, userInfo[user]);
+        require(bytes(userInfo[msg.sender]).length > 0, "Project info not uploaded");
+        verified[msg.sender] = 2;
+        emit Verify(msg.sender, userInfo[msg.sender]);
     }
 
     function applyVerify(string memory cid) external {

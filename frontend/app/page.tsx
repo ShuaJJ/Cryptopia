@@ -28,7 +28,7 @@ export default function Home() {
                 <PostButton { ...accessTokens } />
               </WhiteBox>
               <WhiteBox>
-                <ChatList {...accessTokens} />
+                <ChatList />
               </WhiteBox>
             </div>
         </div>

@@ -6,7 +6,7 @@ export interface ContractInfo {
     address: Address;
 }
 
-export type PostType = typeof POST_TYPES[number] | "post"
+export type PostType = typeof POST_TYPES[number]
 
 export interface AccessTokenProps {
     web3StorageAccessToken: string;
@@ -43,9 +43,18 @@ export interface Post {
 export interface PostContent {
     content?: string;
     type?: PostType;
-    name?: string;
-    description?: string;
     image: string;
+}
+
+export interface UserInfo extends AccessTokenProps {
+    name: string;
+    description: string;
+    website: string;
+    token: string;
+    contact: string;
+    chatId: string;
+    image: string;
+    address: Address;
 }
 
 export interface PostInfo extends PostContent, AccessTokenProps {

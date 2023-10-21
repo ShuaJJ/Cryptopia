@@ -2,14 +2,19 @@ import { useFollowed } from "@/hooks/useFollowed";
 import Modal from "../Modal";
 import MainButton from "../button/MainButton";
 import { Address, WalletClient } from "viem";
-import { ChangeEvent, useState } from "react";
-import sendNewChat from "../push/sendNewChat";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { PushAPI, viemSignerType } from "@pushprotocol/restapi";
+import { ENV } from "@pushprotocol/restapi/src/lib/constants";
+import ChatModal from "../push/ChatModal";
 
 export default function UserModal({
     logo,
     name,
     description,
+    website,
+    token,
+    chatId,
     myAddress,
     walletClient,
     author,
@@ -19,6 +24,9 @@ export default function UserModal({
     logo: string,
     name: string,
     description: string,
+    website: string,
+    token: string,
+    chatId: string,
     myAddress?: Address,
     walletClient?: WalletClient|null,
     author: Address,
@@ -27,92 +35,85 @@ export default function UserModal({
 }) {
 
     const { data: followed, isLoading, refetch} = useFollowed(author, myAddress);
-    const [showInput, setShowInput] = useState(false)
+    const [joinLoading, setJoinLoading] = useState(false);
+    const [pushClient, setPushClient] = useState<PushAPI>();
+    const [entered, setEntered] = useState(false);
+    const [showChat, setShowChat] = useState(false);
 
-    return (
+    const joinGroup = async () => {
+
+        if (entered) {
+            setShowChat(true)
+            return;
+        }
+
+        if (!pushClient) {
+            toast.error('Cannot initialize push client, please try again later');
+            return;
+        }
+
+        setJoinLoading(true)
+        try {
+            const joinGroup = await pushClient.chat.group.join(chatId);
+            console.log('QQQQ', joinGroup)
+            setEntered(true);
+        } catch (e) {
+            console.log('Join failed', e)
+        } finally {
+            setJoinLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        async function checkGroup() {
+            const me = await PushAPI.initialize(walletClient as viemSignerType, {env: ENV.STAGING}); 
+            setPushClient(me);
+            const groupPermissions = await me.chat.group.permissions(chatId);
+            setEntered(groupPermissions.entry);
+        }
+        if (walletClient) {
+            checkGroup()
+        }
+    }, [chatId, walletClient])
+
+    return  showChat ? (
+            <ChatModal chatId={chatId} walletClient={walletClient!} close={close} />
+        ) : (
         <Modal close={close}>
-            <div className="flex flex-col gap-4 items-center justify-center min-w-[320px] max-w-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */} 
-                <img 
-                    src={logo}
-                    alt="logo"
-                    className="w-24 h-24 rounded-full"
-                />
-                <div className="font-semibold text-lg">{name}</div>
-                <div className="text-gray-400 mb-8 text-sm">{description}</div>
-                <MainButton
-                    secondary
-                    loading={isLoading}
-                    onClick={() => {
-                        if (!followed) {
-                            follow(refetch)
-                        }
-                    }}
-                >
-                    {followed ? 'Followed' : 'Follow'}
-                </MainButton>
-                {showInput && <SendMsg walletClient={walletClient} author={author} />}
-                <MainButton
-                    onClick={() => {
-                        setShowInput(!showInput)
-                    }}
-                >
-                    Send Message
-                </MainButton>
-            </div>
+            
+                <div className="flex flex-col gap-4 items-center justify-center min-w-[320px] max-w-2xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */} 
+                    <img 
+                        src={logo}
+                        alt="logo"
+                        className="w-24 h-24 rounded-full"
+                    />
+                    <div className="font-semibold text-lg">{name}</div>
+                    <a 
+                        className="text-sm underline text-purple-dark"
+                        target="_blank"
+                        href={website}
+                    >
+                        {website}
+                    </a>
+                    <div className="text-gray-400 mb-8 text-sm">{description}</div>
+                    <MainButton
+                        secondary
+                        loading={isLoading}
+                        onClick={() => {
+                            if (!followed) {
+                                follow(refetch)
+                            }
+                        }}
+                    >
+                        {followed ? 'Followed' : 'Follow'}
+                    </MainButton>
+                    <MainButton onClick={joinGroup} loading={joinLoading}>
+                        {entered ? 'Enter group chat' : `Enter ${name} Group`}
+                    </MainButton>
+                    <div>*Must hold {name}&apos;s tokens: ${token}</div>
+                </div>
         </Modal>
-    )
+            )
 }
 
-function SendMsg({
-    walletClient,
-    author,
-} : {
-    walletClient?: WalletClient|null,
-    author: Address,
-}) {
-
-    const [text, setText] = useState('')
-    const [loading, setLoading] = useState(false);
-    
-    const updateText = (e: ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value);
-    }
-
-    const send = async () => {
-        if (!walletClient) {
-            toast('Please make sure you are connected', { position: 'top-center'});
-            return;
-        }
-
-        if (!text) {
-            toast('Msg cannot be empty', { position: 'top-center'});
-            return;
-        }
-
-        setLoading(true)
-        setText('')
-        const msgObj = await sendNewChat(walletClient, author, text);
-        console.log('AAAA', msgObj);
-        setLoading(false)
-    }
-
-    return (
-        <div className="flex gap-2 w-full">
-            <div className="flex-1">
-                <input 
-                    className="border-b border-gray-300 w-full outline-none h-12" 
-                    type="text" 
-                    value={text}
-                    placeholder="Type your message"
-                    onChange={updateText}
-                />
-            </div>
-            <div className="flex-none w-32">
-                <MainButton onClick={send} loading={loading}>
-                    <div className="text-center">Send</div>
-                </MainButton>
-            </div>
-        </div>
-    )
-}

@@ -1,8 +1,8 @@
 import { Web3Storage } from 'web3.storage';
-import { PostContent } from './types';
+import { UserInfo } from './types';
 import { ipfsDomain } from './constants';
 
-export default async function getPostContent(web3Token: string, cid: string): Promise<PostContent|null> {
+export default async function getPostContent(web3Token: string, cid: string): Promise<UserInfo|null> {
     const client = new Web3Storage({ token:web3Token })
     const res = await client.get(cid);
     if (!res.ok) {

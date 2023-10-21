@@ -29,7 +29,7 @@ export default function NewPost({
 
     const selectType = (selected: PostType) => {
         setType(selected);
-        if (selected !== 'post' && (isVerified as number) < 2) {
+        if ((isVerified as number) < 2) {
             setNeedVerify(true)
         }
     }
@@ -60,7 +60,7 @@ export default function NewPost({
     }
 
     const userProps = { ...props, contract: userContract, refetch };
-    const postProps = { ...props, contract: postContract, type: type ?? 'post', refetch: refetchPosts };
+    const postProps = { ...props, contract: postContract, type: type ?? 'announcement', refetch: refetchPosts };
 
     const modalBody = () => {
         if (needVerify && isVerified == 0) {

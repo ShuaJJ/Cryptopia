@@ -12,3 +12,6 @@
 [submodule "lib/sismo-connect-solidity"]
 	path = lib/sismo-connect-solidity
 	url = https://github.com/sismo-core/sismo-connect-solidity
+[submodule "lib/wormhole-solidity-sdk"]
+	path = lib/wormhole-solidity-sdk
+	url = https://github.com/wormhole-foundation/wormhole-solidity-sdk

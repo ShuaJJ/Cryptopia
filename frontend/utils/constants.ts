@@ -1,7 +1,8 @@
 import { Chain } from '@wagmi/core'
 import {
     polygonMumbai,
-    arbitrumGoerli
+    arbitrumGoerli,
+    scrollSepolia,
   } from 'wagmi/chains';
 import * as AllContracts from "../contract/contracts.json";
 
@@ -29,7 +30,7 @@ export const localhost = {
 export const SUPPORTED_CHAINS = [
     polygonMumbai,
     arbitrumGoerli,
-    localhost
+    scrollSepolia,
 ];
 
 export const POST_TYPES = [

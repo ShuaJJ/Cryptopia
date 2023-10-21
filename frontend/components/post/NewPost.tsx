@@ -11,6 +11,9 @@ import UserInfo from "../user/UserInfo";
 import PostForm from "./PostForm";
 import { POST_TITLES } from "@/utils/constants";
 import Modal from "../Modal";
+import SismoConnect from "../user/SismoConnect";
+import { sendTx } from "@/utils/sendTx";
+import toast from "react-hot-toast";
 
 export default function NewPost({
     web3StorageAccessToken,
@@ -25,18 +28,16 @@ export default function NewPost({
     const { address } = useAccount();
     const { data: isVerified, refetch: refetchVerified } = useIsVerified(address);
     const [type, setType] = useState<PostType|undefined>(undefined);
-    const [needVerify, setNeedVerify] = useState(false)
 
     const selectType = (selected: PostType) => {
         setType(selected);
-        if ((isVerified as number) < 2) {
-            setNeedVerify(true)
-        }
     }
 
     let title;
-    if (needVerify) {
-        title = isVerified == 0 ? 'Please verify you are a project owner first' : 'Please wait to be verified'
+    if (isVerified == 0) {
+        title = 'Please verify you are a project owner first'
+    } else if (isVerified == 1) {
+        title = 'Please verify you starred ShuaJJ/Cryptopia repo via Sismo Connect to finish verification'
     } else if (type) {
         title = POST_TITLES[type] ?? 'Please upload a cool image and enter the content';
     } else {
@@ -62,23 +63,44 @@ export default function NewPost({
     const userProps = { ...props, contract: userContract, refetch };
     const postProps = { ...props, contract: postContract, type: type ?? 'announcement', refetch: refetchPosts };
 
-    const modalBody = () => {
-        if (needVerify && isVerified == 0) {
-            return <UserInfo { ...userProps } />
-        }else if (!needVerify && type) {
-            return <PostForm { ...postProps } />
-        } else if (!type) {
-            return <TypeSelect onSelect={selectType} />
+    const verifySismo = async (response: string) => {
+        if (!walletClient || !publicClient || !address || !userContract) {
+            toast.error('Please make sure you are connected', { position: 'top-center' })
+            return;
         }
 
-        return null;
+        const verified = await sendTx(
+            'Verify Github Star',
+            address,
+            userContract,
+            'verifySismoConnectResponse',
+            publicClient,
+            walletClient,
+            addRecentTransaction,
+            [response]
+        );
+
+        if (verified) {
+            refetch();
+        }
+    }
+
+    const modalBody = () => {
+        if (isVerified == 0) {
+            return <UserInfo { ...userProps } />
+        } else if (isVerified == 1) {
+            return <SismoConnect callback={verifySismo} />
+        } else if (type) {
+            return <PostForm { ...postProps } />
+        }
+
+        return <TypeSelect onSelect={selectType} />
     }
 
 
     return (
         <Modal close={() => {
             setType(undefined);
-            setNeedVerify(false);
             setShow(false);
         }}>
             {type && (
@@ -86,7 +108,6 @@ export default function NewPost({
                     className="absolute left-3 top-3 inline-block p-4"
                     onClick={() => { 
                         setType(undefined);
-                        setNeedVerify(false); 
                     }}
                 >
                     <Image src={backIcon} alt="back" />

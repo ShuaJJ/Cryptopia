@@ -224,7 +224,7 @@ export default function UserInfo({
                 onClick={createPost}
                 loading={loading}
             >
-                Submit for verification
+                Next
             </MainButton>
         </div>
     )

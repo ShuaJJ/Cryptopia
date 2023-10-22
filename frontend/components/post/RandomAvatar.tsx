@@ -12,7 +12,6 @@ export default function RandomAvatar({
     account,
     publicClient,
     walletClient,
-    contract,
     addRecentTransaction,
     userContract,
     web3StorageAccessToken

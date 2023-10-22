@@ -3,6 +3,7 @@ import {
     polygonMumbai,
     arbitrumGoerli,
     scrollSepolia,
+    mantleTestnet,
   } from 'wagmi/chains';
 import * as AllContracts from "../contract/contracts.json";
 
@@ -31,6 +32,7 @@ export const SUPPORTED_CHAINS = [
     polygonMumbai,
     arbitrumGoerli,
     scrollSepolia,
+    mantleTestnet,
 ];
 
 export const POST_TYPES = [

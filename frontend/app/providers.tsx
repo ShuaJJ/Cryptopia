@@ -42,6 +42,7 @@ export default function Providers({
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider 
                 chains={chains}
+                locale='en'
                 showRecentTransactions={true}
                 theme={lightTheme({
                     accentColor: '#F1EBFE',

@@ -5,6 +5,7 @@ import { AccessTokenProps } from "@/utils/types";
 import PostList from "@/components/post/PostList";
 import GraphProvider from "@/components/GraphProvider";
 import ChatList from "@/components/push/ChatList";
+import FollowList from "@/components/user/FollowList";
 
 export default function Home() {
 
@@ -14,15 +15,14 @@ export default function Home() {
 
   return (
     <WithUserConnect>
+      <GraphProvider>
       <div className="min-h-screen max-w-screen-xl relative mx-auto grid grid-cols-[1fr_2fr_1fr] pt-24 gap-6">
             <div>
-              <WhiteBox>AAA</WhiteBox>
-              <WhiteBox>BBB</WhiteBox>
-              <WhiteBox>CCC</WhiteBox>
+              <WhiteBox>
+                <FollowList { ...accessTokens } />
+              </WhiteBox>
             </div>
-            <GraphProvider>
-              <PostList { ...accessTokens } />
-            </GraphProvider>
+            <PostList { ...accessTokens } />
             <div>
               <WhiteBox>
                 <PostButton { ...accessTokens } />
@@ -32,6 +32,7 @@ export default function Home() {
               </WhiteBox>
             </div>
         </div>
+        </GraphProvider>
     </WithUserConnect>
   )
 }

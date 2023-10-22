@@ -54,7 +54,7 @@ export default function ChatList() {
                         setShowChat(true)
                     }}
                 >
-                    Show My Chats
+                    Show My Group Chats
                 </MainButton>
             )}
             { chatId && <ChatModal chatId={chatId} close={() => { setChatId('') }} walletClient={walletClient!} />}

@@ -46,6 +46,9 @@
     "deploy:user:arbitrum_goerli": "forge script script/DeployUser.s.sol --rpc-url https://arbitrum-goerli.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ARBISCAN",
     "deploy:post:arbitrum_goerli": "forge script script/DeployPost.s.sol --rpc-url https://arbitrum-goerli.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ARBISCAN",
 
+    "deploy:user:mantle_testnet": "forge script script/DeployUser.s.sol --rpc-url https://rpc.testnet.mantle.xyz/ --broadcast --legacy",
+    "deploy:post:mantle_testnet": "forge script script/DeployPost.s.sol --rpc-url https://rpc.testnet.mantle.xyz/ --broadcast --legacy",
+
     "generate": "ts-node ./script/generateContractAddresses.ts"
   },
   "dependencies": {

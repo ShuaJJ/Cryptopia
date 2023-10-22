@@ -14,7 +14,8 @@ export default function RandomAvatar({
     walletClient,
     addRecentTransaction,
     userContract,
-    web3StorageAccessToken
+    web3StorageAccessToken,
+    shortDesc
 }: PostItem) {
 
     const index = Math.floor(Math.random() * 6);
@@ -82,7 +83,9 @@ export default function RandomAvatar({
                 <div className="flex-1">
                     <div className="text-sm font-semibold">{username}</div>
                     {authorInfo?.description && (
-                        <div className="text-xs text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap w-96">{authorInfo.description}</div>
+                        <div className={"text-xs text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap " + (shortDesc ? 'w-32' : 'w-96')} >
+                            {authorInfo.description}
+                        </div>
                     )}
                 </div>
             </div>

@@ -35,7 +35,7 @@ export default function FollowList({ web3StorageAccessToken }: AccessTokenProps)
 
     return (
         <>
-            <div className="text-lg font-semibold">My Follows</div>
+            <div className="text-lg font-semibold mb-6">My Follows</div>
             <div>{follows.length == 0 && <EmptyText text="You have no follows yet" />}</div>
             {follows.map((f) => (
                 <RandomAvatar 
@@ -43,6 +43,7 @@ export default function FollowList({ web3StorageAccessToken }: AccessTokenProps)
                     author={f.follow}
                     account={address}
                     cid={f.cid}
+                    shortDesc
                     walletClient={walletClient}
                     publicClient={publicClient}
                     addRecentTransaction={addRecentTransaction}

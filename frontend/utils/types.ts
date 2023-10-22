@@ -33,6 +33,7 @@ export interface PostItem extends TxProps {
     author: Address;
     cid: string;
     userContract?: ContractInfo | null;
+    shortDesc?: boolean;
 }
 
 export interface Post {

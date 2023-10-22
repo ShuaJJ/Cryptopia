@@ -12,8 +12,11 @@ import {
 } from "sismo-connect-solidity/src/SismoConnectLib.sol";
 import { IWormholeRelayer } from "./interfaces/IWormholeRelayer.sol";
 import { IWormholeReceiver } from "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
+import { AxelarExecutable } from 'axelar-gmp-sdk=solidity/executable/AxelarExecutable.sol';
+import { IAxelarGateway } from 'axelar-gmp-sdk=solidity/interfaces/IAxelarGateway.sol';
+import { IAxelarGasService } from 'axelar-gmp-sdk=solidity/interfaces/IAxelarGasService.sol';
 
-contract User is Ownable, SismoConnect, IWormholeReceiver {
+contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
 
     event Follow(address indexed follower, address indexed follow, string cid);
     event Verify(address user, string cid);
@@ -23,6 +26,7 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
 
     uint256 constant GAS_LIMIT = 50_000;
     IWormholeRelayer public immutable wormholeRelayer;
+    IAxelarGasService public immutable gasService;
     mapping(bytes32 hashed => bool seen) public seenDeliveryVaaHashes;
 
     mapping(address user => string cid) public userInfo;
@@ -32,20 +36,20 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
     mapping(address user => address[] follows) public myFollows;
     mapping(address user => mapping(address target => bool isFollowed)) public followed;
 
-    constructor(address initialOwner) Ownable(initialOwner) 
+    constructor(address initialOwner, address _wormholeRelayer, address _axelarGateway, address _axelarGasService) 
+        Ownable(initialOwner) 
+        AxelarExecutable(_axelarGateway)
         SismoConnect(
             buildConfig({
-                appId: 0x5dc7f3d6e3a6bd3ae49fcfc876ecf217,
-                isImpersonationMode: true
+                appId: 0x5dc7f3d6e3a6bd3ae49fcfc876ecf217
             })
         )
     {
-        address _relayer = block.chainid == 80001 ? 
-            0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0 : 0xAd753479354283eEE1b86c9470c84D42f229FF43;
-        wormholeRelayer = IWormholeRelayer(_relayer);
+        wormholeRelayer = IWormholeRelayer(_wormholeRelayer);
+        gasService = IAxelarGasService(_axelarGasService);
     }
 
-    function verifySismoConnectResponse(bytes memory response) public {
+    function verifySismoConnectResponse(bytes memory response, bool crosschain) public payable {
         AuthRequest[] memory auths = new AuthRequest[](1);
         auths[0] = buildAuth({authType: AuthType.GITHUB});
 
@@ -66,21 +70,67 @@ contract User is Ownable, SismoConnect, IWormholeReceiver {
         require(!githubVerified[githubId], "This githubId already verified");
         githubVerified[githubId] = true;
 
-        require(bytes(userInfo[msg.sender]).length > 0, "Project info not uploaded");
+        string memory cid = userInfo[msg.sender];
+
+        require(cid.length > 0, "Project info not uploaded");
         verified[msg.sender] = 2;
-        emit Verify(msg.sender, userInfo[msg.sender]);
+        emit Verify(msg.sender, cid);
 
-
-        if (block.chainid == 421613 || block.chainid == 80001) {
-            // send verified user address to other supported chains as well
-            wormholeRelayer.sendPayloadToEvm(
-                uint16(block.chainid == 421613 ? 80001 : 421613),
-                address(this),
-                abi.encode(userInfo[msg.sender], msg.sender),
-                0,
-                GAS_LIMIT
-            );
+        if (crosschain) {
+            require(msg.value > 0, "Cross chain gas fee needed");
+            if (block.chainid == 421613 || block.chainid == 80001) {
+                // send verified user address to other supported chains as well
+                wormholeRelayer.sendPayloadToEvm(
+                    uint16(block.chainid == 421613 ? 80001 : 421613),
+                    address(this),
+                    abi.encode(cid, msg.sender),
+                    0,
+                    GAS_LIMIT
+                );
+            } else {
+                string memory chainName = block.chainid == 5001 ? "mantle" : "scroll";
+                setRemoteVerification(chainName, address(this), cid, msg.sender, msg.value);
+                setRemoteVerification("Polygon", address(this), cid, msg.sender, msg.value);
+                setRemoteVerification("arbitrum", address(this), cid, msg.sender, msg.value);
+            }
         }
+
+
+    }
+
+    function setRemoteVerification(
+        string calldata destinationChain,
+        string calldata destinationAddress,
+        string calldata cid,
+        address toVerify,
+        uint256 gasFee
+    ) external {
+        require(gasFee > 0, "Gas payment is required");
+
+        bytes memory payload = abi.encode(cid, toVerify);
+        gasService.payNativeGasForContractCall{ value: gasFee }(
+            address(this),
+            destinationChain,
+            destinationAddress,
+            payload,
+            toVerify
+        );
+        gateway.callContract(destinationChain, destinationAddress, payload);
+    }
+
+    function _execute(
+        string calldata sourceChain_,
+        string calldata sourceAddress_,
+        bytes calldata payload_
+    ) internal override {
+        (cid, toVerify) = abi.decode(payload_, (string, address));
+        userInfo[toVerify] = cid;
+        verified[toVerify] = 2;
+        emit Verify(toVerify, cid);
+        emit VerificationReceived(
+            toVerify,
+            sourceChain_
+        );
     }
 
     function receiveWormholeMessages(

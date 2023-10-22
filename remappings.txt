@@ -6,3 +6,4 @@ openzeppelin-contracts/=lib/openzeppelin-contracts/
 prb-test/=lib/prb-test/src/
 sismo-connect-solidity/=lib/sismo-connect-solidity/
 wormhole-solidity-sdk/=lib/wormhole-solidity-sdk/src/
+axelar-gmp-sdk=solidity/=lib/axelar-gmp-sdk=solidity/contracts/

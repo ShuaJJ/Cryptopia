@@ -7,7 +7,7 @@ const getAbi = (type: string) =>
 const getBlob = (type: string, chainId: string) => 
     JSON.parse(fs.readFileSync(`${rootFolder}/broadcast/Deploy${type}.s.sol/${chainId}/run-latest.json`, "utf8"));
 
-const supportedChains = [31337, 11155111, 80001, 421613, 534351]
+const supportedChains = [80001, 421613, 534351, 5001]
 const contracts = ['User', 'Post'];
 const result: any = {};
 

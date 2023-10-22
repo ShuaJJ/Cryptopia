@@ -12,9 +12,9 @@ import {
 } from "sismo-connect-solidity/src/SismoConnectLib.sol";
 import { IWormholeRelayer } from "./interfaces/IWormholeRelayer.sol";
 import { IWormholeReceiver } from "wormhole-solidity-sdk/interfaces/IWormholeReceiver.sol";
-import { AxelarExecutable } from 'axelar-gmp-sdk=solidity/executable/AxelarExecutable.sol';
-import { IAxelarGateway } from 'axelar-gmp-sdk=solidity/interfaces/IAxelarGateway.sol';
-import { IAxelarGasService } from 'axelar-gmp-sdk=solidity/interfaces/IAxelarGasService.sol';
+import { AxelarExecutable } from 'axelar-gmp-sdk-solidity/executable/AxelarExecutable.sol';
+import { IAxelarGateway } from 'axelar-gmp-sdk-solidity/interfaces/IAxelarGateway.sol';
+import { IAxelarGasService } from 'axelar-gmp-sdk-solidity/interfaces/IAxelarGasService.sol';
 
 contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
 
@@ -49,6 +49,26 @@ contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
         gasService = IAxelarGasService(_axelarGasService);
     }
 
+    function setRemoteVerification(
+        string memory destinationChain,
+        string memory destinationAddress,
+        string memory cid,
+        address toVerify,
+        uint256 gasFee
+    ) public {
+        require(gasFee > 0, "Gas payment is required");
+
+        bytes memory payload = abi.encode(cid, toVerify);
+        gasService.payNativeGasForContractCall{ value: gasFee }(
+            address(this),
+            destinationChain,
+            destinationAddress,
+            payload,
+            toVerify
+        );
+        gateway.callContract(destinationChain, destinationAddress, payload);
+    }
+
     function verifySismoConnectResponse(bytes memory response, bool crosschain) public payable {
         AuthRequest[] memory auths = new AuthRequest[](1);
         auths[0] = buildAuth({authType: AuthType.GITHUB});
@@ -72,7 +92,7 @@ contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
 
         string memory cid = userInfo[msg.sender];
 
-        require(cid.length > 0, "Project info not uploaded");
+        require(bytes(cid).length > 0, "Project info not uploaded");
         verified[msg.sender] = 2;
         emit Verify(msg.sender, cid);
 
@@ -89,33 +109,14 @@ contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
                 );
             } else {
                 string memory chainName = block.chainid == 5001 ? "mantle" : "scroll";
-                setRemoteVerification(chainName, address(this), cid, msg.sender, msg.value);
-                setRemoteVerification("Polygon", address(this), cid, msg.sender, msg.value);
-                setRemoteVerification("arbitrum", address(this), cid, msg.sender, msg.value);
+                string memory destinationAddress = string(abi.encodePacked(address(this)));
+                setRemoteVerification(chainName, destinationAddress, cid, msg.sender, msg.value);
+                setRemoteVerification(string("Polygon"), destinationAddress, cid, msg.sender, msg.value);
+                setRemoteVerification(string("arbitrum"), destinationAddress, cid, msg.sender, msg.value);
             }
         }
 
 
-    }
-
-    function setRemoteVerification(
-        string calldata destinationChain,
-        string calldata destinationAddress,
-        string calldata cid,
-        address toVerify,
-        uint256 gasFee
-    ) external {
-        require(gasFee > 0, "Gas payment is required");
-
-        bytes memory payload = abi.encode(cid, toVerify);
-        gasService.payNativeGasForContractCall{ value: gasFee }(
-            address(this),
-            destinationChain,
-            destinationAddress,
-            payload,
-            toVerify
-        );
-        gateway.callContract(destinationChain, destinationAddress, payload);
     }
 
     function _execute(
@@ -123,14 +124,10 @@ contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
         string calldata sourceAddress_,
         bytes calldata payload_
     ) internal override {
-        (cid, toVerify) = abi.decode(payload_, (string, address));
+        (string memory cid, address toVerify) = abi.decode(payload_, (string, address));
         userInfo[toVerify] = cid;
         verified[toVerify] = 2;
         emit Verify(toVerify, cid);
-        emit VerificationReceived(
-            toVerify,
-            sourceChain_
-        );
     }
 
     function receiveWormholeMessages(
@@ -158,14 +155,14 @@ contract User is Ownable, SismoConnect, IWormholeReceiver, AxelarExecutable {
         );
     }
 
-    function applyVerify(string memory cid) external {
+    function applyVerify(string calldata cid) external {
         require(verified[msg.sender] == 0, "Already applied");
         userInfo[msg.sender] = cid;
         verified[msg.sender] = 1;
         emit ApplyVerify(msg.sender, cid);
     }
 
-    function updateUserInfo(string memory cid) external {
+    function updateUserInfo(string calldata cid) external {
         userInfo[msg.sender] = cid;
     }
 

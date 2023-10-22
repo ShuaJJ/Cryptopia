@@ -6,7 +6,7 @@ dataSources:
     name: User
     network: mumbai
     source:
-      address: "0xC97d5D78E72f9e782559274BE158aEb30cab8a8C"
+      address: "0x8E84d002c30Bf522233Fa1517ee2718D670fd578"
       abi: User
       startBlock: 41466117
     mapping:

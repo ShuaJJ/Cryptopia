@@ -108,7 +108,7 @@ function Post(props: PostItem) {
                     </>
                 )}
             </div>
-            <div className='flex items-center justify-end text-gray-600 pr-4'>
+            {/* <div className='flex items-center justify-end text-gray-600 pr-4'>
                 <Image 
                     src={chatIcon} 
                     alt="chat" 
@@ -116,7 +116,7 @@ function Post(props: PostItem) {
                     width={24}
                     height={24}
                 /> Leave a comment
-            </div>
+            </div> */}
         </div>
     )
 }

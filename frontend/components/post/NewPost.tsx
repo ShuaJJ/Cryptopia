@@ -77,7 +77,7 @@ export default function NewPost({
             publicClient,
             walletClient,
             addRecentTransaction,
-            [response]
+            [response, false]
         );
 
         if (verified) {
@@ -89,7 +89,11 @@ export default function NewPost({
         if (isVerified == 0) {
             return <UserInfo { ...userProps } />
         } else if (isVerified == 1) {
-            return <SismoConnect callback={verifySismo} />
+            return (
+                <div className="text-center">
+                    <SismoConnect callback={verifySismo} />
+                </div>
+            )
         } else if (type) {
             return <PostForm { ...postProps } />
         }

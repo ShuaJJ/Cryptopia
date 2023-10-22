@@ -39,6 +39,7 @@
 
     "deploy:user:polygon_mumbai": "forge script script/DeployUser.s.sol 0x0591C25ebd0580E0d4F27A82Fc2e24E7489CB5e0 0xBF62ef1486468a6bd26Dd669C06db43dEd5B849B 0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6 --sig 'run(address,address,address)' --rpc-url https://polygon-mumbai.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_POLYGONSCAN",
     "deploy:post:polygon_mumbai": "forge script script/DeployPost.s.sol --rpc-url https://polygon-mumbai.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_POLYGONSCAN",
+    "deploy:token:polygon_mumbai": "forge script script/DeployToken.s.sol --rpc-url https://polygon-mumbai.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_POLYGONSCAN",
 
     "deploy:user:arbitrum_goerli": "forge script script/DeployUser.s.sol 0xAd753479354283eEE1b86c9470c84D42f229FF43 0xe432150cce91c13a887f7D836923d5597adD8E31 0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6 --sig 'run(address,address,address)' --rpc-url https://arbitrum-goerli.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ARBISCAN",
     "deploy:post:arbitrum_goerli": "forge script script/DeployPost.s.sol --rpc-url https://arbitrum-goerli.infura.io/v3/$API_KEY_INFURA --broadcast --verify --etherscan-api-key $API_KEY_ARBISCAN",
